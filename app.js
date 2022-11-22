@@ -6,6 +6,8 @@ const mongoose = require("mongoose")
 const app = express()
 const departmentRoute = require("./routes/departmentRoute")
 const employeeRoute = require("./routes/employeeRoute")
+const timeInRoute = require("./routes/timeInRoute")
+const employeeAttendanceRoute = require("./routes/employeeAttendanceRoute")
 
 dotenv.config({ path: "./config.env" })
 const port = app.set("port", process.env.PORT || 4040)
@@ -24,6 +26,8 @@ app.use(express.json())
 
 app.use("/app/v1/departments", departmentRoute)
 app.use("/app/v1/employees", employeeRoute)
+app.use("/app/v1/employees/signIn", timeInRoute)
+app.use("/app/v1/attendance", employeeAttendanceRoute)
 
 app.listen(app.get("port"), () => {
   console.log(`Server is running on port ${app.get("port")}`)

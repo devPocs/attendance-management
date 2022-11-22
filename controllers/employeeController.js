@@ -3,11 +3,14 @@ const Employee = require("./../models/employeeSchema")
 const Department = require("./../models/departmentSchema")
 const ObjectId = mongoose.Types.ObjectId
 
+//global variables
+let employeeIdsArray = []
+
 const generateEmployeeId = async (deptID) => {
   let alpha
-  const result = await Department.findById(deptID).select("department")
+  let result = await Department.findById(deptID).select("department")
   let dept = result.department
-  if ((dept.length = 2)) {
+  if (dept.length == 2) {
     alpha = dept.slice(0, 2)
   } else {
     alpha = dept.slice(0, 3)
@@ -16,9 +19,12 @@ const generateEmployeeId = async (deptID) => {
   num = num.toString()
   let employeeId = alpha + "/" + num
 
-  if ((await Employee.findOne({ empoyeeId: employeeId })) != null) {
+  if (employeeIdsArray.includes(employeeId) == true) {
+    console.log("already exists")
     generateEmployeeId(deptID) // i used a reursive technique.
   } else {
+    employeeIdsArray.push(employeeId)
+    console.log(employeeIdsArray)
     return employeeId
   }
 }
@@ -49,6 +55,7 @@ exports.addNewEmployee = async (req, res, next) => {
     if ((await checkEmail(email)) == "true") {
       res.status(400).send("email already exists")
     } else {
+      console.log(departmentID)
       const newEmployee = await Employee.create({
         name: name,
         email: email,
