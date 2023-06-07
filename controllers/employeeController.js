@@ -1,81 +1,43 @@
-const mongoose = require("mongoose")
-const Employee = require("./../models/employeeSchema")
-const Department = require("./../models/departmentSchema")
-const ObjectId = mongoose.Types.ObjectId
+const mongoose = require("mongoose");
+const Employee = require("./../models/employeeSchema");
+const Department = require("./../models/departmentSchema");
+const niv = require("node-input-validator");
+const { generateEmployeeId } = require("./../utils/helperFunctions");
+const catchAsync = require("./../utils/catchAsync");
 
-//global variables
-let employeeIdsArray = []
+exports.addNewEmployee = catchAsync(async (req, res, next) => {
+	const { name, email, department, role, gender } = req.body;
+	const newEmployee = await Employee.create({
+		name: name,
+		email: email,
+		department: department,
+		role: role,
+		gender: gender
+	});
 
-const generateEmployeeId = async (deptID) => {
-  let alpha
-  let result = await Department.findById(deptID).select("department")
-  let dept = result.department
-  if (dept.length == 2) {
-    alpha = dept.slice(0, 2)
-  } else {
-    alpha = dept.slice(0, 3)
-  }
-  let num = Math.floor(Math.random() * 1000) + 1
-  num = num.toString()
-  let employeeId = alpha + "/" + num
+	return res.status(200).json({
+		message: "saved successfully!",
+		status: "success",
+		newEmployee
+	});
+});
 
-  if (employeeIdsArray.includes(employeeId) == true) {
-    console.log("already exists")
-    generateEmployeeId(deptID) // i used a reursive technique.
-  } else {
-    employeeIdsArray.push(employeeId)
-    console.log(employeeIdsArray)
-    return employeeId
-  }
-}
-//const checkEmployeeId = async()
-
-const checkEmail = async (email) => {
-  let check = await Employee.findOne({ email: email })
-  var checkRes
-  if (check !== null) {
-    checkRes = "true"
-  } else {
-    checkRes = "false"
-  }
-  return checkRes
-}
-
-exports.addNewEmployee = async (req, res, next) => {
-  const name = req.body.name
-  const email = req.body.email
-
-  let departmentID = new ObjectId(req.query.department)
-
-  const role = req.body.role
-  const gender = req.body.gender
-  if (!name || !departmentID || !email || !role || !gender) {
-    res.status(400).send("fill the fields properly and submit again")
-  } else {
-    if ((await checkEmail(email)) == "true") {
-      res.status(400).send("email already exists")
-    } else {
-      console.log(departmentID)
-      const newEmployee = await Employee.create({
-        name: name,
-        email: email,
-        department: departmentID,
-        employeeId: await generateEmployeeId(departmentID),
-        role: role,
-        gender: gender,
-      })
-
-      res.status(200).send("saved successfully!")
-    }
-  }
-  next()
-}
 exports.getAllEmployees = async (req, res, next) => {
-  const allEmployees = await Employee.find({}).populate("department")
-  res.status(200).json({ allEmployees })
-}
+	const allEmployees = await Employee.find({}).populate("department");
+	res.status(200).json({ allEmployees });
+};
 exports.getEmployee = async (req, res, next) => {
-  const employeeId = req.query.employeeId
-  const employee = await Employee.find({ employeeId: employeeId })
-  res.status(200).send(employee)
-}
+	const employeeId = req.query.employeeId;
+	const employee = await Employee.find({ employeeId: employeeId });
+	res.status(200).send(employee);
+};
+
+/*exports.editEmployee = async (req, res, next) => {} //
+	---this api when called should be able to edit an employees's details as well as ubdate the employee id in his time in array if neccesary
+*/
+
+/*exports.removeEmployee = async (req, res, next) => {}
+	--- this api, when called should be able to remove the employee from the list of employees and remove his time in details from the time in 
+	array.
+
+*/
