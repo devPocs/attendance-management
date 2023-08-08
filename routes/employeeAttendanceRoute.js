@@ -1,9 +1,9 @@
-const express = require("express")
+const express = require("express");
 const {
-  getAllAttendance,
-} = require("../controllers/employeeAttendanceController")
-const router = express.Router()
+	getAllAttendance
+} = require("./../controllers/employeeAttendanceController");
+const router = express.Router();
 
-router.get("/all_attendance", getAllAttendance)
+router.get("/all_attendance", getAllAttendance);
 
-module.exports = router
+module.exports = router;

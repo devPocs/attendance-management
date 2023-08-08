@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const catchAsync = require("./../utils/catchAsync");
-const ErrorHandler = require("../utils/ErrorHandler");
+const ErrorHandler = require("./../utils/ErrorHandler");
 const TimeIn = require("./../models/timesInSchema");
 const { options } = require("../routes/departmentRoute");
 const Employee = require("./../models/employeeSchema");
@@ -8,7 +8,7 @@ const dateFNS = require("date-fns");
 
 let timeLimit = new Date();
 timeLimit.setHours(8);
-timeLimit.setMinutes(00);
+timeLimit.setMinutes(0);
 timeLimit.setSeconds(59);
 timeLimit = dateFNS.format(timeLimit, "yyyy-MM-dd HH:mm:ss");
 

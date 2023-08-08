@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const Employee = require("./employeeSchema");
 const dateFNS = require("date-fns");
 const cron = require("node-cron");
 
@@ -15,4 +14,4 @@ const timesInSchema = new mongoose.Schema({
 const TimeIn = mongoose.model("timein", timesInSchema);
 module.exports = TimeIn;
 
-timesInSchema.statics.setDefault = () => {};
+//timesInSchema.statics.setDefault = () => {};

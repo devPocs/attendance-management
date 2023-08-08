@@ -3,18 +3,22 @@ const mongoose = require("mongoose");
 const TimeIn = require("./timesInSchema");
 const Department = require("./departmentSchema");
 const ErrorHandler = require("./../utils/ErrorHandler");
+const bcrypt = require("bcrypt");
 const catchAsync = require("./../utils/catchAsync");
 
 let employeeIdArray = [];
 const employeeSchema = new mongoose.Schema({
 	name: String,
 	email: { type: String, unique: true, required: true },
-	department: String,
+	password: { type: String },
+	department: { type: String, required: true },
 	employeeId: String,
 	role: String,
 	gender: String,
+	isAdmin: { type: Boolean, default: false },
 	createdAt: { type: Date, default: new Date() }
 });
+
 employeeSchema.pre("validate", async function (next) {
 	const checkEmail = await this.constructor.findOne({
 		email: this.email
@@ -60,14 +64,20 @@ employeeSchema.post("save", async function (doc) {
 		{ employeeId: doc.employeeId },
 		{ new: true }
 	);
-	console.log(employeeData.employeeId);
+
 	employeeIdArray.push(employeeData.employeeId);
 	console.log(employeeIdArray);
-
 	const timeInData = await TimeIn.create({
 		employeeId: doc.employeeId
 	});
 });
+
+employeeSchema.methods.correctPassword = async function (
+	enteredPassword,
+	adminPassword
+) {
+	return bcrypt.compare(enteredPassword, adminPassword);
+};
 
 const Employee = mongoose.model("employee", employeeSchema);
 

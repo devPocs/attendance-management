@@ -1,6 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const Department = require("../models/departmentSchema");
+const Department = require("./../models/departmentSchema");
 const catchAsync = require("./../utils/catchAsync");
 const ErrorHandler = require("./../utils/ErrorHandler");
 

@@ -1,0 +1,32 @@
+html(lang="en")
+    head
+      meta(charset="UTF-8")
+      meta(name="viewport", content="width=device-width, initial-scale=1.0")
+      title Document
+    body 
+      form#newEmployee
+        label(for='name') Name:
+        input#name(type='text', name='name')
+        br
+        label(for='email') Email:
+        input#email(type='email', name='email') 
+        br
+        label(for='department') Department:
+        input#department(type='text', name='department') 
+        br
+        label(for='role') Role:
+        input#role(type='text', name='role') 
+        br
+        label Gender:
+        label
+          input(type='radio', name='gender', value='male')
+          | Male
+        label
+          input(type='radio', name='gender', value='female')
+          | Female
+        label
+          input(type='radio', name='gender', value='other')
+          | Other
+        br
+        button#createEmployee(type="submit") Create
+      script(src="/js/script.js")

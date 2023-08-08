@@ -8,6 +8,7 @@ exports.checkNewUser = (req, res, next) => {
 		role: "required|string",
 		gender: "required|string"
 	});
+	console.log(req.body);
 	validation.check().then(
 		catchAsync(async (matched) => {
 			if (!matched) {
