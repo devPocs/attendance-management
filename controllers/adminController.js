@@ -22,7 +22,7 @@ exports.addNewEmployee = catchAsync(async (req, res, next) => {
 			newEmployee
 		});
 	} else {
-		res.status(400).json({ message: "unsucessful" });
+		return res.status(400).json({ message: "unsucessful" });
 	}
 });
 

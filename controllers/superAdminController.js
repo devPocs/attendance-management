@@ -25,13 +25,14 @@ exports.createAdmin = catchAsync(async (req, res, next) => {
 
 	const salt = 10;
 	let password = generatePassword(5);
-	console.log(password);
 
 	//at this point send the unhashed password to the admin via mail.
 	const hashedPassword = await bcrypt.hash(password, salt);
 
-	const adminCheck = await Employee.findOne({ employeeId }).select("isAdmin");
-	console.log(adminCheck);
+	const adminCheck = await Employee.findOne({ employeeId });
+	if (adminCheck === null) {
+		return res.status(404).json({ message: "No employee found." });
+	}
 	if (adminCheck.isAdmin === true) {
 		return res.json(
 			"message: employee already an admin or employee doesn't exist!"
@@ -43,12 +44,12 @@ exports.createAdmin = catchAsync(async (req, res, next) => {
 		);
 
 		if (newAdmin) {
-			console.log(password);
+			console.log(adminCheck);
 			// send the password to the admin's email address
 			// fix this in a class.
 			const mailOptions = {
 				from: "pokoh.ufuoma@gmail.com",
-				to: email,
+				to: adminCheck.email,
 				subject: "New Admin",
 				text: `<h2>Hello, ${adminCheck.name},</h2>
 			<p>You have been made an admin. Your password is: <h2>${password}.</h2> 
@@ -63,15 +64,33 @@ exports.createAdmin = catchAsync(async (req, res, next) => {
 
 			transporter.sendMail(mailOptions, (error, info) => {
 				if (error) {
-					res.status(500).send("Failed to send email");
+					return res.status(500).send(`Failed to send email, ${error}`);
 				} else {
-					res.status(200).json({ message: "Email sent successfully" });
+					return res.status(200).json({ message: "Email sent successfully" });
 				}
 			});
-			return res.send("success");
 		}
 	}
 });
-exports.editAdmin = catchAsync((req, res, next) => {});
-exports.deleteAdmin = catchAsync((req, res, next) => {});
-exports.getAdmin = catchAsync((req, res, next) => {});
+exports.deleteAdmin = catchAsync(async (req, res, next) => {
+	const employeeId = req.body.employeeId;
+	const deleteAdmin = Employee.findOneAndUpdate(
+		{ employeeId: employeeId },
+		{ isAdmin: false }
+	);
+	if (deleteAdmin) {
+		return res.status(200).json({ message: "Admin deleted successfully!" });
+	}
+});
+exports.getAdmins = catchAsync(async (req, res, next) => {
+	const employeeId = req.body.employeeId;
+	const employees = await Employee.find({ employeeId }).select({
+		isAdmin: true
+	});
+
+	if (employee === null) {
+		return res.status(200).json({ message: "No admin found." });
+	} else {
+		return res.status(200).json({ message: employees });
+	}
+});

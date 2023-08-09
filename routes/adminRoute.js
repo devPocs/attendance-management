@@ -9,9 +9,8 @@ const {
 } = require("../controllers/adminController");
 const {
 	createAdmin,
-	editAdmin,
 	deleteAdmin,
-	getAdmin
+	getAdmins
 } = require("../controllers/superAdminController");
 
 const { checkNewUser } = require("../utils/validators");
@@ -24,8 +23,7 @@ admin.patch("/edit_employee", editEmployee);
 
 //super_admin routes
 superAdmin.post("/create_admin", createAdmin);
-superAdmin.patch("/edit_admin", editAdmin);
 superAdmin.delete("/delete_admin", deleteAdmin);
-superAdmin.get("/get_admin", getAdmin);
+superAdmin.get("/get_admin", getAdmins);
 
 module.exports = { admin, superAdmin };
