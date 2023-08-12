@@ -1,6 +1,7 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const morgan = require("morgan");
+const cookieParser = require("cookie-parser");
 const pug = require("pug");
 const path = require("path");
 const { google } = require("googleapis");
@@ -28,6 +29,7 @@ mongoose.connect("mongodb://127.0.0.1:27017/AttendanceManager");
 //app middlewares
 app.use(morgan("dev"));
 app.use(express.json());
+app.use(cookieParser());
 
 //set up templating engine
 app.set("view engine", "pug");

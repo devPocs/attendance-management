@@ -1,6 +1,8 @@
 const express = require("express");
 const admin = express();
 const superAdmin = express();
+
+const { protectRoute } = require("./../controllers/authController");
 const {
 	addNewEmployee,
 	getAllEmployees,
@@ -12,13 +14,14 @@ const {
 	deleteAdmin,
 	getAdmins
 } = require("../controllers/superAdminController");
+const { login } = require("./../controllers/authController");
 
 const { checkNewUser } = require("../utils/validators");
-
-admin.post("/create_new_employee", checkNewUser, addNewEmployee);
-admin.get("/all_employees", getAllEmployees);
-admin.get("/search_employee", getEmployee);
-admin.patch("/edit_employee", editEmployee);
+admin.post("/login", login);
+admin.post("/create_new_employee", protectRoute, checkNewUser, addNewEmployee);
+admin.get("/all_employees", protectRoute, getAllEmployees);
+admin.get("/search_employee", protectRoute, getEmployee);
+admin.patch("/edit_employee", protectRoute, editEmployee);
 //router.delete("/delete", deleteEmployee)
 
 //super_admin routes

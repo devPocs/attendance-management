@@ -16,7 +16,7 @@ const { getEmployee } = require("./../controllers/adminController");
 //router.use(["/admin", "/superAdmin"], isLoggedIn);
 
 router.get("/", getHomePage);
-router.get("/login", login);
+router.get("/admin/login", login);
 router.get("/check_employee", getEmployee);
 router.get("/init_employee", initEmployee);
 router.get("/error", getErrorPage);
