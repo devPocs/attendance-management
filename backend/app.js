@@ -3,6 +3,7 @@ const dotenv = require("dotenv");
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
 const pug = require("pug");
+const cors = require("cors");
 const path = require("path");
 const { google } = require("googleapis");
 const mongoose = require("mongoose");
@@ -29,7 +30,9 @@ mongoose.connect("mongodb://127.0.0.1:27017/AttendanceManager");
 //app middlewares
 app.use(morgan("dev"));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(cors());
 
 //set up templating engine
 app.set("view engine", "pug");
@@ -50,26 +53,26 @@ initializeTimeIn();
 
 //unhandled routes
 app.all("*", (req, res, next) => {
-	const err = new Error(`Can't find ${req.originalUrl} on this server!`);
-	err.errCode = 404;
-	err.status = "fail!";
+  const err = new Error(`Can't find ${req.originalUrl} on this server!`);
+  err.errCode = 404;
+  err.status = "fail!";
 
-	next(err);
+  next(err);
 });
 
 //error handler
 app.use((err, req, res, next) => {
-	const errorMessage = err.message;
-	const errorStatus = err.status || "INTERNAL SERVER ERROR";
-	const errorCode = err.errCode || 500;
-	const stack = err.stack;
-	return res
-		.status(errorCode)
-		.json({ status: errorStatus, message: errorMessage, stack: stack });
+  const errorMessage = err.message;
+  const errorStatus = err.status || "INTERNAL SERVER ERROR";
+  const errorCode = err.errCode || 500;
+  const stack = err.stack;
+  return res
+    .status(errorCode)
+    .json({ status: errorStatus, message: errorMessage, stack: stack });
 });
 
 app.listen(app.get("port"), () => {
-	console.log(`Server is running on port ${app.get("port")}`);
+  console.log(`Server is running on port ${app.get("port")}`);
 });
 
 //create an admin interface to allow admin access and perform admin duties like: adding a new employee... editing employee details and

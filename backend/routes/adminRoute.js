@@ -4,15 +4,15 @@ const superAdmin = express();
 
 const { protectRoute } = require("./../controllers/authController");
 const {
-	addNewEmployee,
-	getAllEmployees,
-	getEmployee,
-	editEmployee
+  addNewEmployee,
+  getAllEmployees,
+  getEmployee,
+  editEmployee,
 } = require("../controllers/adminController");
 const {
-	createAdmin,
-	deleteAdmin,
-	getAdmins
+  createAdmin,
+  deleteAdmin,
+  getAdmins,
 } = require("../controllers/superAdminController");
 const { login } = require("./../controllers/authController");
 
