@@ -73,7 +73,7 @@ function CreateEmployee() {
         formData.append("image", blob, "employee_picture.jpeg");
       }
       console.log(formData);
-      // Replace this with an actual API endpoint for creating employees
+
       const response = await fetch(
         "http://localhost:5000/app/v1/admin/create_new_employee",
         {

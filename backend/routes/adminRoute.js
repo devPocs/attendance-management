@@ -47,9 +47,6 @@ admin.post(
   "/create_new_employee",
   upload,
   async (req, res, next) => {
-    const formData = req.file; // Change this to req.file to get the file data
-    console.log(formData);
-
     // Check if there's a file in the request
     if (!req.file) {
       return res.status(400).json({ error: "No image file provided" });
@@ -57,20 +54,34 @@ admin.post(
 
     const imageBuffer = req.file.buffer;
 
-    // Upload image to Cloudinary
     try {
-      const result = await cloudinary.uploader.upload(imageBuffer, {
-        folder: "employee-images",
-      });
-      req.image = result.secure_url;
-      next();
+      const result = await cloudinary.uploader.upload_stream(
+        { folder: "employee-images" },
+        (error, result) => {
+          if (error) {
+            console.error(error);
+            return res.status(500).json({
+              status: "INTERNAL SERVER ERROR",
+              message: "Error uploading image to Cloudinary",
+            });
+          }
+
+          req.image = result.secure_url;
+          next();
+        }
+      ).end(imageBuffer);
     } catch (error) {
-      return next(error);
+      console.error(error);
+      return res.status(500).json({
+        status: "INTERNAL SERVER ERROR",
+        message: "Error uploading image to Cloudinary",
+      });
     }
   },
   checkNewUser,
   addNewEmployee
 );
+
 admin.get("/all_employees", protectRoute, getAllEmployees);
 admin.get("/search_employee", getEmployee);
 admin.patch("/edit_employee", protectRoute, editEmployee);
