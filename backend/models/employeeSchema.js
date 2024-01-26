@@ -8,75 +8,77 @@ const catchAsync = require("./../utils/catchAsync");
 
 let employeeIdArray = [];
 const employeeSchema = new mongoose.Schema({
-	name: String,
-	email: { type: String, unique: true, required: true },
-	password: { type: String },
-	department: { type: String, required: true },
-	employeeId: String,
-	role: String,
-	gender: String,
-	isAdmin: { type: Boolean, default: false },
-	createdAt: { type: Date, default: new Date() }
+  name: String,
+  email: { type: String, unique: true, required: true },
+  password: { type: String },
+  department: { type: String, required: true },
+  employeeId: String,
+  role: String,
+  gender: String,
+  isAdmin: { type: Boolean, default: false },
+  isSuperAdmin: { type: Boolean, default: false },
+  image: String,
+  createdAt: { type: Date, default: new Date() },
 });
 
 employeeSchema.pre("validate", async function (next) {
-	const checkEmail = await this.constructor.findOne({
-		email: this.email
-	});
+  const checkEmail = await this.constructor.findOne({
+    email: this.email,
+  });
 
-	if (checkEmail) {
-		return next(new ErrorHandler("This email already exists!", 400));
-	} else return next();
+  if (checkEmail) {
+    return next(new ErrorHandler("This email already exists!", 400));
+  } else return next();
 });
 
 employeeSchema.pre("validate", async function (next) {
-	const checkDepartment = await Department.findOne({
-		department: this.department
-	});
+  const checkDepartment = await Department.findOne({
+    department: this.department,
+  });
 
-	if (checkDepartment === null) {
-		return next(new ErrorHandler("That department does not exist!", 400));
-	}
+  if (checkDepartment === null) {
+    return next(new ErrorHandler("That department does not exist!", 400));
+  }
 });
 employeeSchema.post("save", async function (doc) {
-	let department = doc.department;
-	department = await Department.findOne({ department: department }).select(
-		"alias"
-	);
+  let department = doc.department;
+  department = await Department.findOne({ department: department }).select(
+    "alias"
+  );
 
-	function generateNum(department) {
-		let num = Math.floor(Math.random() * 9000 + 1000);
-		num = num.toString();
-		doc.employeeId = department.alias + "/" + num;
+  function generateNum(department) {
+    let num = Math.floor(Math.random() * 9000 + 1000);
+    num = num.toString();
+    doc.employeeId = department.alias + "/" + num;
 
-		if (employeeIdArray.includes(doc.employeeId)) {
-			generateNum(department);
-		} else {
-			return doc.employeeId;
-		}
-	}
-	generateNum(department);
+    if (employeeIdArray.includes(doc.employeeId)) {
+      generateNum(department);
+    } else {
+      return doc.employeeId;
+    }
+  }
+  generateNum(department);
 
-	console.log(doc.employeeId);
+  console.log(doc.employeeId);
 
-	const employeeData = await Employee.findOneAndUpdate(
-		{ _id: doc._id },
-		{ employeeId: doc.employeeId },
-		{ new: true }
-	);
+  const employeeData = await Employee.findOneAndUpdate(
+    { _id: doc._id },
+    { employeeId: doc.employeeId },
+    { new: true }
+  );
 
-	employeeIdArray.push(employeeData.employeeId);
-	console.log(employeeIdArray);
-	const timeInData = await TimeIn.create({
-		employeeId: doc.employeeId
-	});
+  employeeIdArray.push(employeeData.employeeId);
+  console.log(employeeIdArray);
+  const timeInData = await TimeIn.create({
+    employeeId: doc.employeeId,
+  });
 });
 
 employeeSchema.methods.correctPassword = async function (
-	enteredPassword,
-	adminPassword
+  enteredPassword,
+  adminPassword
 ) {
-	return bcrypt.compare(enteredPassword, adminPassword);
+  return bcrypt.compare(enteredPassword, adminPassword);
 };
 
 const Employee = mongoose.model("employee", employeeSchema);

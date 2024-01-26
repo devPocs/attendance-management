@@ -4,20 +4,20 @@ const mongoose = require("mongoose");
 const ErrorHandler = require("./../utils/ErrorHandler");
 
 const departmentSchema = new mongoose.Schema({
-	department: { type: String, unique: true, required: true },
-	//HOD: { type: mongoose.Schema.ObjectId, ref: "hod", required: false },
-	alias: { type: String, required: true }
-	// deptMembers: [{ type: mongoose.Schema.ObjectId, ref: Employee }],
+  department: { type: String, unique: true, required: true },
+  //HOD: { type: mongoose.Schema.ObjectId, ref: "hod", required: false },
+  alias: { type: String, required: true },
+  // deptMembers: [{ type: mongoose.Schema.ObjectId, ref: Employee }],
 });
 
 departmentSchema.pre("save", async function (next) {
-	const checkDepartment = await this.constructor.findOne({
-		department: this.department
-	});
+  const checkDepartment = await this.constructor.findOne({
+    department: this.department,
+  });
 
-	if (checkDepartment) {
-		return next(new ErrorHandler("This department already exists!", 400));
-	} else return next();
+  if (checkDepartment) {
+    return next(new ErrorHandler("This department already exists!", 400));
+  } else return next();
 });
 
 const Department = mongoose.model("department", departmentSchema);

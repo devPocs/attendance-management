@@ -5,6 +5,7 @@ const cookieParser = require("cookie-parser");
 const pug = require("pug");
 const cors = require("cors");
 const path = require("path");
+const cloudinary = require("cloudinary").v2;
 const { google } = require("googleapis");
 const mongoose = require("mongoose");
 const departmentRoute = require("./routes/departmentRoute");
@@ -24,6 +25,13 @@ const { admin, superAdmin } = require("./routes/adminRoute");
 dotenv.config({ path: "./config.env" });
 
 const port = app.set("port", process.env.PORT || 4040);
+
+//cloudinary configuration
+cloudinary.config({
+  cloud_name: "dbg6zbtm4",
+  api_key: "649721938535186",
+  api_secret: "lgZrOgteHsLtLS41HywQrAI8JY0",
+});
 
 mongoose.connect("mongodb://127.0.0.1:27017/AttendanceManager");
 
@@ -45,7 +53,7 @@ app.use("/app/v1/employees", employeeRoute);
 app.use("/app/v1/employees/signIn", timeInRoute);
 app.use("/app/v1/attendance", employeeAttendanceRoute);
 app.get("/app/v1/get_event", myCalendar);
-app.use("/", viewsRoute);
+app.use("/app/v1/", viewsRoute);
 app.use(["/app/v1/admin", "/app/v1/superAdmin"], admin);
 app.use("/app/v1/superAdmin", superAdmin);
 

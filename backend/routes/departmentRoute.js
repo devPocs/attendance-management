@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const {
-	addNewDepartment,
-	getAllDepartments
+  addNewDepartment,
+  getAllDepartments,
 } = require("./../controllers/departmentController");
 
 router.post("/new_department", addNewDepartment);

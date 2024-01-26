@@ -1,12 +1,14 @@
+// this may not be necessary again.
+
 const mongoose = require("mongoose");
 
 const adminSchema = new mongoose.Schema({
-	name: String,
-	email: { type: String, unique: true, required: true },
-	password: { type: String, unique: true, required: true },
-	department: String,
-	employeeId: String,
-	role: { type: String, default: "admin" }
+  name: String,
+  email: { type: String, unique: true, required: true },
+  password: { type: String, unique: true, required: true },
+  department: String,
+  employeeId: String,
+  role: { type: String, default: "admin" },
 });
 
 const Admin = new mongoose.model("admin", adminSchema);
