@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "./../contexts/AuthContext";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   async function handleLogin(e) {
     e.preventDefault();
@@ -18,23 +20,29 @@ function Login() {
       },
     };
 
-    const response = await fetch(
-      "http://localhost:5000/app/v1/admin/login",
-      options
-    );
-    const data = await response.json();
-    console.log(data);
-    if (data.status === "success") {
-      navigate("/admin");
+    try {
+      const response = await fetch(
+        "http://localhost:5000/app/v1/admin/login",
+        options,
+      );
+      const data = await response.json();
+      console.log(data);
+      if (data.status === "success") {
+        // Set the user in the context
+        login(data);
+        navigate("/admin");
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
     }
   }
 
   return (
-    <div className="flex items-center justify-center h-screen">
-      <div className="max-w-md w-full p-4 bg-white rounded-lg shadow-lg">
-        <h1 className="text-2xl font-bold mb-4">Login</h1>
+    <div className="flex h-screen items-center justify-center">
+      <div className="w-full max-w-md rounded-lg bg-white p-4 shadow-lg">
+        <h1 className="mb-4 text-2xl font-bold">Login</h1>
         <form id="login" onSubmit={handleLogin}>
-          <label htmlFor="email" className="block text-sm font-semibold mb-2">
+          <label htmlFor="email" className="mb-2 block text-sm font-semibold">
             Email:
           </label>
           <input
@@ -43,12 +51,12 @@ function Login() {
             name="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-3 py-2 border rounded-md mb-4 shadow-md focus:outline-none focus:ring focus:border-blue-300"
+            className="mb-4 w-full rounded-md border px-3 py-2 shadow-md focus:border-blue-300 focus:outline-none focus:ring"
           />
 
           <label
             htmlFor="password"
-            className="block text-sm font-semibold mb-2"
+            className="mb-2 block text-sm font-semibold"
           >
             Password:
           </label>
@@ -58,13 +66,13 @@ function Login() {
             name="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-3 py-2 border rounded-md mb-4 shadow-md focus:outline-none focus:ring focus:border-blue-300"
+            className="mb-4 w-full rounded-md border px-3 py-2 shadow-md focus:border-blue-300 focus:outline-none focus:ring"
           />
 
           <button
             id="login"
             type="submit"
-            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 font-semibold "
+            className="rounded-md bg-blue-500 px-4 py-2 font-semibold text-white hover:bg-blue-600 "
           >
             Login
           </button>

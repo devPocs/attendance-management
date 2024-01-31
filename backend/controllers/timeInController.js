@@ -4,7 +4,9 @@ const ErrorHandler = require("./../utils/ErrorHandler");
 const TimeIn = require("./../models/timesInSchema");
 const { options } = require("../routes/departmentRoute");
 const Employee = require("./../models/employeeSchema");
+
 const dateFNS = require("date-fns");
+const { parseISO } = require("date-fns");
 
 let timeLimit = new Date();
 timeLimit.setHours(8);
@@ -16,14 +18,14 @@ console.log(timeLimit);
 let remark = "";
 
 function punctualityCheck(timeIn) {
-	const checkValue = dateFNS.compareAsc(
-		dateFNS.parse(timeIn, "yyyy-MM-dd HH:mm:ss", new Date()),
-		dateFNS.parse(timeLimit, "yyyy-MM-dd HH:mm:ss", new Date())
-	);
+  const checkValue = dateFNS.compareAsc(
+    dateFNS.parse(timeIn, "yyyy-MM-dd HH:mm:ss", new Date()),
+    dateFNS.parse(timeLimit, "yyyy-MM-dd HH:mm:ss", new Date())
+  );
 
-	if (checkValue === 1) remark = "late!";
-	else if (checkValue === -1) remark = "early!";
-	else remark = "just in time!";
+  if (checkValue === 1) remark = "late!";
+  else if (checkValue === -1) remark = "early!";
+  else remark = "just in time!";
 }
 /*
 ------procedure------
@@ -31,35 +33,44 @@ function punctualityCheck(timeIn) {
 2. if it is present, check if the employee has already signed in for the current day. 
 3. if he hasn't signed in for the current day, sign him in and send him a remark if he is early or not.
 */
-
 exports.postTimeIn = catchAsync(async (req, res, next) => {
-	const employeeId = req.body.employeeId;
-	const idCheck = await TimeIn.findOne({ employeeId: employeeId });
+  const employeeId = req.body.employeeId;
+  const currentDate = dateFNS.format(new Date(), "yyyy-MM-dd");
 
-	if (!idCheck) {
-		return next(new ErrorHandler("Staff not found!", 404));
-	} else if (idCheck) {
-		const checkIfSignedIn = await TimeIn.findOne({
-			timein: dateFNS.format(new Date(), "yyyy-MM-dd")
-		});
-		if ((checkIfSignedIn.timeIn[0][1] = "signed-In")) {
-			next(new ErrorHandler("Staff is already signed in!", 400));
-		} else {
-			punctualityCheck(dateFNS.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
+  // Check if the employee has already signed in on the current date
+  const existingTimeIn = await TimeIn.findOne({
+    employeeId: employeeId,
+    "timeIn.0": {
+      $exists: true,
+    },
+  });
 
-			const data = await TimeIn.updateOne(
-				{ employeeId: employeeId },
-				{
-					$push: {
-						timeIn: [
-							dateFNS.format(new Date(), "yyyy-MM-dd HH:mm:ss"),
-							"signed-In",
-							remark
-						]
-					}
-				}
-			);
-			res.status(200).json({ message: "signed in!", remark: remark });
-		}
-	}
+  if (existingTimeIn) {
+    // Check if there is a time entry for the current day
+    const existingTimeInForToday = existingTimeIn.timeIn.some((entry) =>
+      dateFNS.isSameDay(new Date(entry[0]), new Date(currentDate))
+    );
+
+    if (existingTimeInForToday) {
+      return next(new ErrorHandler("Staff is already signed in!", 400));
+    }
+  }
+
+  // If not signed in or no entry for today, proceed with the time in logic
+  punctualityCheck(dateFNS.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
+
+  const data = await TimeIn.updateOne(
+    { employeeId: employeeId },
+    {
+      $push: {
+        timeIn: [
+          dateFNS.format(new Date(), "yyyy-MM-dd HH:mm:ss"),
+          "signed-In",
+          remark,
+        ],
+      },
+    }
+  );
+
+  res.status(200).json({ message: "signed in!", remark: remark });
 });

@@ -23,7 +23,7 @@ function Home() {
 
     const response = await fetch(
       "http://localhost:5000/app/v1/employees/search_employee",
-      options
+      options,
     );
     const data = await response.json();
     console.log(data);
@@ -40,15 +40,15 @@ function Home() {
   const isSending = status === "sending";
 
   return (
-    <div className="flex items-center justify-center h-screen">
+    <div className="flex h-screen items-center justify-center">
       <form
         onSubmit={handleSubmit}
-        className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
+        className="mb-4 rounded bg-white px-8 pb-8 pt-6 shadow-md"
       >
         <div className="mb-4">
           <label
             htmlFor="employeeId"
-            className="block text-gray-700 text-sm font-bold mb-2"
+            className="mb-2 block text-sm font-bold text-gray-700"
           >
             Enter Employee Id:
           </label>
@@ -61,7 +61,7 @@ function Home() {
             value={employeeId}
             onChange={(e) => setEmployeeId(e.target.value)}
             placeholder="Enter Employee ID"
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
           />
         </div>
         <div className="flex items-center justify-between">
@@ -69,14 +69,14 @@ function Home() {
             id="checkID"
             disabled={isSending}
             type="submit"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            className="focus:shadow-outline rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 focus:outline-none"
           >
             Check ID
           </button>
           {isSending && (
             <div className="ml-4 flex items-center">
-              <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-blue-500 border-r-2 border-b-2 "></div>
-              <p className="text-blue-500 ml-2">Checking...</p>
+              <div className="h-4 w-4 animate-spin rounded-full border-b-2 border-r-2 border-t-2 border-blue-500 "></div>
+              <p className="ml-2 text-blue-500">Checking...</p>
             </div>
           )}
         </div>

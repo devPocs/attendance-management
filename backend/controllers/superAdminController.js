@@ -97,6 +97,7 @@ exports.getAdmins = catchAsync(async (req, res, next) => {
 });
 
 //create a super admin
+
 //const addSuperAdmin = catchAsync(async (req, res, next) => {
 //  const email = "superAdmin@gmail.com";
 //  let password = "superAdmin123456";
@@ -107,6 +108,7 @@ exports.getAdmins = catchAsync(async (req, res, next) => {
 //  const superAdmin = await SuperAdmin.create({
 //    email,
 //    password: hashedPassword,
+//    isSuperAdmin:true
 //  });
 //});
 //addSuperAdmin();

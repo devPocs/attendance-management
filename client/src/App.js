@@ -6,19 +6,8 @@ import Employee from "./pages/Employee";
 import Error from "./pages/Error";
 import AdminRoutes from "./pages/AdminRoutes";
 import Login from "./pages/Login";
-
-const AdminRouteGuard = ({ element }) => {
-  const navigate = useNavigate();
-  const isAuthenticated = true; // Replace with your authentication logic
-
-  useEffect(() => {
-    if (!isAuthenticated) {
-      navigate("/login");
-    }
-  }, [isAuthenticated, navigate]);
-
-  return isAuthenticated ? element : null;
-};
+import ProtectedRoute from "./ProtectedRoute";
+import { useAuth } from "./contexts/AuthContext";
 
 function App() {
   return (
@@ -28,7 +17,7 @@ function App() {
           <li>
             <Link
               to="/"
-              className="text-white hover:no-underline hover:text-gray-300 hover:font-semibold text-2xl"
+              className="text-2xl text-white hover:font-semibold hover:text-gray-300 hover:no-underline"
             >
               Home |
             </Link>
@@ -37,7 +26,7 @@ function App() {
           <li>
             <Link
               to="/admin"
-              className="text-white hover:no-underline hover:text-gray-300 hover:font-semibold text-2xl"
+              className="text-2xl text-white hover:font-semibold hover:text-gray-300 hover:no-underline"
             >
               | Admin
             </Link>
@@ -48,9 +37,12 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/employee" element={<Employee />} />
         <Route path="/error" element={<Error />} />
+        {/* Use ProtectedRoute for admin route */}
         <Route
           path="/admin/*"
-          element={<AdminRouteGuard element={<AdminRoutes />} />}
+          element={
+            <ProtectedRoute element={<AdminRoutes />} adminOnly={true} />
+          }
         />
         <Route path="/login" element={<Login />} />
       </Routes>
