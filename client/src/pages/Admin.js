@@ -3,19 +3,25 @@ import { Link } from "react-router-dom";
 
 function Admin() {
   return (
-    <div className="flex justify-center items-center h-screen">
+    <div className="flex h-screen items-center justify-center">
       <div className="text-center">
         <Link
           to="/admin/create_employee"
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
+          className="mr-2 rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
         >
           Create New Employee
         </Link>
         <Link
           to="/admin/edit_employee"
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
         >
           Edit Employee
+        </Link>
+        <Link
+          to="/admin/get_employee_times"
+          className="ml-2 rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+        >
+          Get Employee TimeIns
         </Link>
       </div>
     </div>

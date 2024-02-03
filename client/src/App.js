@@ -8,6 +8,7 @@ import AdminRoutes from "./pages/AdminRoutes";
 import Login from "./pages/Login";
 import ProtectedRoute from "./ProtectedRoute";
 import { useAuth } from "./contexts/AuthContext";
+import TimeInPage from "./pages/subPages/TimeInPage";
 
 function App() {
   return (
@@ -37,6 +38,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/employee" element={<Employee />} />
         <Route path="/error" element={<Error />} />
+        <Route path="/time_in_page" element={<TimeInPage />} />
+
         {/* Use ProtectedRoute for admin route */}
         <Route
           path="/admin/*"
