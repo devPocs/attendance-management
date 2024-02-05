@@ -40,13 +40,16 @@ function App() {
         <Route path="/error" element={<Error />} />
         <Route path="/time_in_page" element={<TimeInPage />} />
 
-        {/* Use ProtectedRoute for admin route */}
+        {/* Use ProtectedRoute for admin route 
         <Route
           path="/admin/*"
           element={
             <ProtectedRoute element={<AdminRoutes />} adminOnly={true} />
           }
         />
+        */}
+
+        <Route path="/admin" element={<AdminRoutes />} />
         <Route path="/login" element={<Login />} />
       </Routes>
       <ToastContainer />
