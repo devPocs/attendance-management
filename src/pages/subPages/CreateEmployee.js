@@ -105,176 +105,183 @@ function CreateEmployee() {
   const isSending = status === "sending";
 
   return (
-    <div className="flex h-screen items-center justify-center">
-      <form
-        encType="multipart/form-data"
-        id="newEmployee"
-        onSubmit={handleSubmit}
-        className="mb-4 rounded bg-white px-8 pb-8 pt-6 shadow-md"
-      >
-        <div className="mb-4">
-          <label
-            htmlFor="name"
-            className="mb-2 block text-sm font-bold text-gray-700"
-          >
-            Name:
-          </label>
-          <input
-            id="name"
-            type="text"
-            name="name"
-            required={true}
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="Enter Name"
-            className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
-          />
-        </div>
-        <div className="mb-4">
-          <label
-            htmlFor="email"
-            className="mb-2 block text-sm font-bold text-gray-700"
-          >
-            Email:
-          </label>
-          <input
-            id="email"
-            type="email"
-            name="email"
-            value={email}
-            required={true}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Enter Email"
-            className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
-          />
-        </div>
-        <div className="mb-4">
-          <label
-            htmlFor="department"
-            className="mb-2 block text-sm font-bold text-gray-700"
-          >
-            Department:
-          </label>
-          <select
-            id="department"
-            name="department"
-            required={true}
-            value={department}
-            onChange={(e) => setDepartment(e.target.value)}
-            className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
-          >
-            <option value="">Select Department</option>
-            {departments.map((dept) => (
-              <option key={dept._id} value={dept.department}>
-                {dept.department}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="mb-4">
-          <label
-            htmlFor="role"
-            className="mb-2 block text-sm font-bold text-gray-700"
-          >
-            Role:
-          </label>
-          <input
-            id="role"
-            type="text"
-            name="role"
-            required={true}
-            value={role}
-            onChange={(e) => setRole(e.target.value)}
-            placeholder="Enter Role"
-            className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="mb-2 block text-sm font-bold text-gray-700">
-            Gender:
-          </label>
-          <div>
-            <label className="mr-6 inline-flex items-center">
-              <input
-                type="radio"
-                name="gender"
-                required={true}
-                value="male"
-                onChange={() => setGender("male")}
-              />
-              Male
+    <>
+      <div className="mt-20 text-center">
+        <span className="text-3xl font-bold text-blue-500">
+          Add New Employee
+        </span>
+      </div>
+      <div className="flex h-screen items-center justify-center">
+        <form
+          encType="multipart/form-data"
+          id="newEmployee"
+          onSubmit={handleSubmit}
+          className="mb-4 rounded bg-white px-8 pb-8 pt-6 shadow-md"
+        >
+          <div className="mb-4">
+            <label
+              htmlFor="name"
+              className="mb-2 block text-sm font-bold text-gray-700"
+            >
+              Name:
             </label>
-            <label className="mr-6 inline-flex items-center">
-              <input
-                type="radio"
-                name="gender"
-                required={true}
-                value="female"
-                onChange={() => setGender("female")}
-              />
-              Female
+            <input
+              id="name"
+              type="text"
+              name="name"
+              required={true}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Enter Name"
+              className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
+            />
+          </div>
+          <div className="mb-4">
+            <label
+              htmlFor="email"
+              className="mb-2 block text-sm font-bold text-gray-700"
+            >
+              Email:
             </label>
-            <label className="inline-flex items-center">
-              <input
-                type="radio"
-                name="gender"
-                required={true}
-                value="other"
-                onChange={() => setGender("other")}
-              />
-              Other
+            <input
+              id="email"
+              type="email"
+              name="email"
+              value={email}
+              required={true}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter Email"
+              className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
+            />
+          </div>
+          <div className="mb-4">
+            <label
+              htmlFor="department"
+              className="mb-2 block text-sm font-bold text-gray-700"
+            >
+              Department:
             </label>
+            <select
+              id="department"
+              name="department"
+              required={true}
+              value={department}
+              onChange={(e) => setDepartment(e.target.value)}
+              className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
+            >
+              <option value="">Select Department</option>
+              {departments.map((dept) => (
+                <option key={dept._id} value={dept.department}>
+                  {dept.department}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="mb-4">
+            <label
+              htmlFor="role"
+              className="mb-2 block text-sm font-bold text-gray-700"
+            >
+              Role:
+            </label>
+            <input
+              id="role"
+              type="text"
+              name="role"
+              required={true}
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+              placeholder="Enter Role"
+              className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="mb-2 block text-sm font-bold text-gray-700">
+              Gender:
+            </label>
+            <div>
+              <label className="mr-6 inline-flex items-center">
+                <input
+                  type="radio"
+                  name="gender"
+                  required={true}
+                  value="male"
+                  onChange={() => setGender("male")}
+                />
+                Male
+              </label>
+              <label className="mr-6 inline-flex items-center">
+                <input
+                  type="radio"
+                  name="gender"
+                  required={true}
+                  value="female"
+                  onChange={() => setGender("female")}
+                />
+                Female
+              </label>
+              <label className="inline-flex items-center">
+                <input
+                  type="radio"
+                  name="gender"
+                  required={true}
+                  value="other"
+                  onChange={() => setGender("other")}
+                />
+                Other
+              </label>
+            </div>
+          </div>
+          <input
+            type="hidden"
+            id="image"
+            name="image" // Ensure this matches the field expected by Multer
+            value={image ? image.split(",")[1] : ""}
+          />
+          <div className="flex items-center justify-between">
+            <button
+              id="createEmployee"
+              disabled={isSending}
+              type="submit"
+              className="focus:shadow-outline rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 focus:outline-none"
+            >
+              Create
+            </button>
+            {isSending && (
+              <div className="ml-4 flex items-center">
+                <div className="h-4 w-4 animate-spin rounded-full border-b-2 border-r-2 border-t-2 border-blue-500 "></div>
+                <p className="ml-2 text-blue-500">Please Wait...</p>
+              </div>
+            )}
+          </div>
+        </form>
+        <div className="mb-4">
+          <label
+            htmlFor="webcam"
+            className="mb-2 block text-sm font-bold text-gray-700"
+          >
+            Activate Webcam:
+          </label>
+          <div className="relative">
+            <Webcam
+              id="webcam"
+              audio={false}
+              ref={webcamRef}
+              screenshotFormat="image/jpeg"
+              className="webcam"
+            />
+            <button onClick={capture} className="capture-button" type="button">
+              Capture Picture
+            </button>
+            {image && (
+              <div className="captured-image">
+                <img src={image} alt="Captured" />
+              </div>
+            )}
           </div>
         </div>
-        <input
-          type="hidden"
-          id="image"
-          name="image" // Ensure this matches the field expected by Multer
-          value={image ? image.split(",")[1] : ""}
-        />
-        <div className="flex items-center justify-between">
-          <button
-            id="createEmployee"
-            disabled={isSending}
-            type="submit"
-            className="focus:shadow-outline rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 focus:outline-none"
-          >
-            Create
-          </button>
-          {isSending && (
-            <div className="ml-4 flex items-center">
-              <div className="h-4 w-4 animate-spin rounded-full border-b-2 border-r-2 border-t-2 border-blue-500 "></div>
-              <p className="ml-2 text-blue-500">Please Wait...</p>
-            </div>
-          )}
-        </div>
-      </form>
-      <div className="mb-4">
-        <label
-          htmlFor="webcam"
-          className="mb-2 block text-sm font-bold text-gray-700"
-        >
-          Activate Webcam:
-        </label>
-        <div className="relative">
-          <Webcam
-            id="webcam"
-            audio={false}
-            ref={webcamRef}
-            screenshotFormat="image/jpeg"
-            className="webcam"
-          />
-          <button onClick={capture} className="capture-button" type="button">
-            Capture Picture
-          </button>
-          {image && (
-            <div className="captured-image">
-              <img src={image} alt="Captured" />
-            </div>
-          )}
-        </div>
       </div>
-    </div>
+    </>
   );
 }
 

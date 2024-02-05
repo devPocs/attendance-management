@@ -95,222 +95,229 @@ function EditEmployee() {
   };
 
   return (
-    <div className="flex h-screen items-center justify-center">
-      {/* Check ID Form */}
-      <form
-        action="http://localhost:5000/check_employee"
-        method="POST"
-        id="editEmployeeCheckId"
-        className="mb-4 rounded bg-white px-8 pb-8 pt-6 shadow-md"
-      >
-        <div className="mb-4">
-          <label
-            htmlFor="employeeId"
-            className="mb-2 block text-sm font-bold text-gray-700"
-          >
-            Enter Employee Id:
-          </label>
-          <input
-            id="employeeId"
-            type="text"
-            name="employeeId"
-            value={employeeDetails.employeeId || ""}
-            onChange={(e) =>
-              setEmployeeDetails({
-                employeeId: e.target.value,
-              })
-            }
-            className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
-          />
-        </div>
-        <button
-          id="checkID"
-          type="button"
-          onClick={handleCheckId}
-          className="focus:shadow-outline rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 focus:outline-none"
-        >
-          Check ID
-        </button>
-      </form>
-
-      {/* Edit Employee Form */}
-      <div>
+    <>
+      <div className="mt-20 text-center">
+        <span className="text-3xl font-bold text-blue-500">
+          Edit Employee Details
+        </span>
+      </div>
+      <div className="flex h-screen items-center justify-center">
+        {/* Check ID Form */}
         <form
-          id="editEmployeeForm"
-          onSubmit={handleSubmit}
+          action="http://localhost:5000/check_employee"
+          method="POST"
+          id="editEmployeeCheckId"
           className="mb-4 rounded bg-white px-8 pb-8 pt-6 shadow-md"
         >
           <div className="mb-4">
             <label
-              htmlFor="editName"
+              htmlFor="employeeId"
               className="mb-2 block text-sm font-bold text-gray-700"
             >
-              Name:
+              Enter Employee Id:
             </label>
             <input
-              id="editName"
+              id="employeeId"
               type="text"
-              name="name"
-              value={employeeDetails[0]?.name || ""}
-              onChange={(e) => handleChange("name", e.target.value)}
-              className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
-            />
-          </div>
-
-          <div className="mb-4">
-            <label
-              htmlFor="editEmail"
-              className="mb-2 block text-sm font-bold text-gray-700"
-            >
-              Email:
-            </label>
-            <input
-              id="editEmail"
-              type="email"
-              name="email"
-              value={employeeDetails[0]?.email || ""}
+              name="employeeId"
+              value={employeeDetails.employeeId || ""}
               onChange={(e) =>
                 setEmployeeDetails({
-                  ...employeeDetails,
-                  email: e.target.value,
+                  employeeId: e.target.value,
                 })
               }
               className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
             />
           </div>
-
-          <div className="mb-4">
-            <label
-              htmlFor="editDepartment"
-              className="mb-2 block text-sm font-bold text-gray-700"
-            >
-              Department:
-            </label>
-            <input
-              id="editDepartment"
-              type="text"
-              name="department"
-              value={employeeDetails[0]?.department || ""}
-              onChange={(e) =>
-                setEmployeeDetails({
-                  ...employeeDetails,
-                  department: e.target.value,
-                })
-              }
-              readOnly="readonly"
-              className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
-            />
-          </div>
-
-          <div className="mb-4">
-            <label
-              htmlFor="editEmployeeId"
-              className="mb-2 block text-sm font-bold text-gray-700"
-            >
-              EmployeeID:
-            </label>
-            <input
-              id="editEmployeeId"
-              type="text"
-              name="editEmployeeId"
-              value={employeeDetails[0]?.employeeId || ""}
-              readOnly="readonly"
-              className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
-            />
-          </div>
-
-          <div className="mb-4">
-            <label
-              htmlFor="editRole"
-              className="mb-2 block text-sm font-bold text-gray-700"
-            >
-              Role:
-            </label>
-            <input
-              id="editRole"
-              type="text"
-              name="role"
-              value={employeeDetails[0]?.role || ""}
-              onChange={(e) =>
-                setEmployeeDetails({
-                  ...employeeDetails,
-                  role: e.target.value,
-                })
-              }
-              className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
-            />
-          </div>
-
-          <div className="mb-4">
-            <label className="mb-2 block text-sm font-bold text-gray-700">
-              Gender:
-            </label>
-            <label className="mr-4">
-              <input
-                type="radio"
-                name="gender"
-                value="male"
-                checked={employeeDetails[0]?.gender === "male"}
-                onChange={(e) =>
-                  setEmployeeDetails({
-                    ...employeeDetails,
-                    gender: e.target.value,
-                  })
-                }
-              />
-              Male
-            </label>
-            <label className="mr-4">
-              <input
-                type="radio"
-                name="gender"
-                value="female"
-                checked={employeeDetails[0]?.gender === "female"}
-                onChange={(e) =>
-                  setEmployeeDetails({
-                    ...employeeDetails,
-                    gender: e.target.value,
-                  })
-                }
-              />
-              Female
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="gender"
-                value="other"
-                checked={employeeDetails[0]?.gender === "other"}
-                onChange={(e) =>
-                  setEmployeeDetails({
-                    ...employeeDetails,
-                    gender: e.target.value,
-                  })
-                }
-              />
-              Other
-            </label>
-          </div>
-
-          <div className="flex items-center justify-between">
-            <button
-              type="submit"
-              className="focus:shadow-outline rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 focus:outline-none"
-            >
-              Make Changes
-            </button>
-          </div>
+          <button
+            id="checkID"
+            type="button"
+            onClick={handleCheckId}
+            className="focus:shadow-outline rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 focus:outline-none"
+          >
+            Check ID
+          </button>
         </form>
 
-        {/* Clear Fields Button */}
-        <button
-          onClick={clearFields}
-          className="focus:shadow-outline mb-4 rounded bg-red-500 px-4 py-2 font-bold text-white hover:bg-red-700 focus:outline-none"
-        >
-          Clear Fields
-        </button>
+        {/* Edit Employee Form */}
+        <div>
+          <form
+            id="editEmployeeForm"
+            onSubmit={handleSubmit}
+            className="mb-4 rounded bg-white px-8 pb-8 pt-6 shadow-md"
+          >
+            <div className="mb-4">
+              <label
+                htmlFor="editName"
+                className="mb-2 block text-sm font-bold text-gray-700"
+              >
+                Name:
+              </label>
+              <input
+                id="editName"
+                type="text"
+                name="name"
+                value={employeeDetails[0]?.name || ""}
+                onChange={(e) => handleChange("name", e.target.value)}
+                className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
+              />
+            </div>
+
+            <div className="mb-4">
+              <label
+                htmlFor="editEmail"
+                className="mb-2 block text-sm font-bold text-gray-700"
+              >
+                Email:
+              </label>
+              <input
+                id="editEmail"
+                type="email"
+                name="email"
+                value={employeeDetails[0]?.email || ""}
+                onChange={(e) =>
+                  setEmployeeDetails({
+                    ...employeeDetails,
+                    email: e.target.value,
+                  })
+                }
+                className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
+              />
+            </div>
+
+            <div className="mb-4">
+              <label
+                htmlFor="editDepartment"
+                className="mb-2 block text-sm font-bold text-gray-700"
+              >
+                Department:
+              </label>
+              <input
+                id="editDepartment"
+                type="text"
+                name="department"
+                value={employeeDetails[0]?.department || ""}
+                onChange={(e) =>
+                  setEmployeeDetails({
+                    ...employeeDetails,
+                    department: e.target.value,
+                  })
+                }
+                readOnly="readonly"
+                className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
+              />
+            </div>
+
+            <div className="mb-4">
+              <label
+                htmlFor="editEmployeeId"
+                className="mb-2 block text-sm font-bold text-gray-700"
+              >
+                EmployeeID:
+              </label>
+              <input
+                id="editEmployeeId"
+                type="text"
+                name="editEmployeeId"
+                value={employeeDetails[0]?.employeeId || ""}
+                readOnly="readonly"
+                className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
+              />
+            </div>
+
+            <div className="mb-4">
+              <label
+                htmlFor="editRole"
+                className="mb-2 block text-sm font-bold text-gray-700"
+              >
+                Role:
+              </label>
+              <input
+                id="editRole"
+                type="text"
+                name="role"
+                value={employeeDetails[0]?.role || ""}
+                onChange={(e) =>
+                  setEmployeeDetails({
+                    ...employeeDetails,
+                    role: e.target.value,
+                  })
+                }
+                className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
+              />
+            </div>
+
+            <div className="mb-4">
+              <label className="mb-2 block text-sm font-bold text-gray-700">
+                Gender:
+              </label>
+              <label className="mr-4">
+                <input
+                  type="radio"
+                  name="gender"
+                  value="male"
+                  checked={employeeDetails[0]?.gender === "male"}
+                  onChange={(e) =>
+                    setEmployeeDetails({
+                      ...employeeDetails,
+                      gender: e.target.value,
+                    })
+                  }
+                />
+                Male
+              </label>
+              <label className="mr-4">
+                <input
+                  type="radio"
+                  name="gender"
+                  value="female"
+                  checked={employeeDetails[0]?.gender === "female"}
+                  onChange={(e) =>
+                    setEmployeeDetails({
+                      ...employeeDetails,
+                      gender: e.target.value,
+                    })
+                  }
+                />
+                Female
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="gender"
+                  value="other"
+                  checked={employeeDetails[0]?.gender === "other"}
+                  onChange={(e) =>
+                    setEmployeeDetails({
+                      ...employeeDetails,
+                      gender: e.target.value,
+                    })
+                  }
+                />
+                Other
+              </label>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <button
+                type="submit"
+                className="focus:shadow-outline rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 focus:outline-none"
+              >
+                Make Changes
+              </button>
+            </div>
+          </form>
+
+          {/* Clear Fields Button */}
+          <button
+            onClick={clearFields}
+            className="focus:shadow-outline mb-4 rounded bg-red-500 px-4 py-2 font-bold text-white hover:bg-red-700 focus:outline-none"
+          >
+            Clear Fields
+          </button>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
