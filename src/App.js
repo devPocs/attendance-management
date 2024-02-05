@@ -49,7 +49,7 @@ function App() {
         />
         */}
 
-        <Route path="/admin" element={<AdminRoutes />} />
+        <Route path="/admin/*" element={<AdminRoutes />} />
         <Route path="/login" element={<Login />} />
       </Routes>
       <ToastContainer />
