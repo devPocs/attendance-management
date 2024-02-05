@@ -22,7 +22,7 @@ function Login() {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/app/v1/admin/login",
+        "https://attendance-manager-back-i4so-4u3ylam7c-pokoh-ufuomas-projects.vercel.app/app/v1/admin/login",
         options,
       );
       const data = await response.json();
