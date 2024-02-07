@@ -40,7 +40,7 @@ function EditEmployee() {
   const handleCheckId = async () => {
     try {
       const response = await fetch(
-        `http://localhost:5000/app/v1/admin/search_employee?employeeId=${employeeDetails.employeeId}`,
+        `https://attendance-manager-backend.vercel.app/admin/search_employee?employeeId=${employeeDetails.employeeId}`,
       );
       const data = await response.json();
 
@@ -72,13 +72,16 @@ function EditEmployee() {
 
     try {
       // Perform the update using the details in employeeDetails state
-      const response = await fetch("http://localhost:5000/update_employee", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        "https://attendance-manager-backend.vercel.app/update_employee",
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(employeeDetails),
         },
-        body: JSON.stringify(employeeDetails),
-      });
+      );
 
       const data = await response.json();
 
@@ -104,7 +107,7 @@ function EditEmployee() {
       <div className="flex h-screen items-center justify-center">
         {/* Check ID Form */}
         <form
-          action="http://localhost:5000/check_employee"
+          action="https://attendance-manager-backend.vercel.app/check_employee"
           method="POST"
           id="editEmployeeCheckId"
           className="mb-4 rounded bg-white px-8 pb-8 pt-6 shadow-md"

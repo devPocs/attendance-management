@@ -78,7 +78,7 @@ function CreateEmployee() {
       }
 
       const response = await fetch(
-        "http://localhost:5000/app/v1/admin/create_new_employee",
+        "https://attendance-manager-backend.vercel.app/admin/create_new_employee",
         {
           method: "POST",
           body: formData,

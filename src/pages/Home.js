@@ -22,7 +22,7 @@ function Home() {
     };
 
     const response = await fetch(
-      "https://attendance-manager-back-i4so-4u3ylam7c-pokoh-ufuomas-projects.vercel.app/app/v1/employees/search_employee",
+      "https://attendance-manager-backend.vercel.app/employees/search_employee",
       options,
     );
     const data = await response.json();
