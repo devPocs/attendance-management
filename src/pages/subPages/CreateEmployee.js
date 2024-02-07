@@ -38,7 +38,7 @@ function CreateEmployee() {
   const fetchDepartments = useCallback(async () => {
     try {
       const response = await fetch(
-        "http://localhost:5000/app/v1/departments/all_departments",
+        "https://attendance-manager-backend.vercel.app/api/v1/departments/all_departments",
       );
       const data = await response.json();
 
@@ -78,7 +78,7 @@ function CreateEmployee() {
       }
 
       const response = await fetch(
-        "https://attendance-manager-backend.vercel.app/admin/create_new_employee",
+        "https://attendance-manager-backend.vercel.app/api/v1/admin/create_new_employee",
         {
           method: "POST",
           body: formData,
