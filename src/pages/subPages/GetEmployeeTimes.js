@@ -28,7 +28,7 @@ function GetEmployeeTimes() {
     const data = await response.json();
 
     if (data.success === false) {
-      navigate("/error");
+      navigate("/error", { state: { message: data.message } });
       window.history.replaceState(null, "", "/error");
     } else {
       const name = data.message[1].name;
