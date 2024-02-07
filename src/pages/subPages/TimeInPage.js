@@ -4,7 +4,6 @@ import { useLocation } from "react-router-dom";
 function TimeInPage() {
   const location = useLocation();
   const { timeIns, name, employeeId } = location.state;
-  console.log(timeIns);
 
   return (
     <div className="container mx-auto p-8">

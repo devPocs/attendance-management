@@ -26,10 +26,10 @@ function GetEmployeeTimes() {
       options,
     );
     const data = await response.json();
-
+    console.log(data.success);
     if (data.success === "false") {
       navigate("/error", { state: { message: data.message } });
-      console.log(data.message);
+
       window.history.replaceState(null, "", "/");
     } else {
       const name = data.message[1].name;
