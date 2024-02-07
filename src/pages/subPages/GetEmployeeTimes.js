@@ -29,6 +29,7 @@ function GetEmployeeTimes() {
 
     if (data.success === "false") {
       navigate("/error", { state: { message: data.message } });
+      console.log(data.message);
       window.history.replaceState(null, "", "/");
     } else {
       const name = data.message[1].name;
