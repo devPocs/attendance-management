@@ -28,9 +28,8 @@ function GetEmployeeTimes() {
     const data = await response.json();
     console.log(data.success);
     if (data.success === "false") {
-      navigate("/error", { state: { message: data.message } });
-
-      window.history.replaceState(null, "", "/");
+      navigate("/error");
+      window.history.replaceState(null, "", "/error");
     } else {
       const name = data.message[1].name;
       const timeIns = data.message[0].timeIn;
@@ -39,7 +38,7 @@ function GetEmployeeTimes() {
       navigate("/time_in_page", {
         state: { timeIns: timeIns, name: name, employeeId: employeeId },
       });
-      window.history.replaceState(null, "", "/");
+      window.history.replaceState(null, "", "/time_in_page");
     }
   }
 
