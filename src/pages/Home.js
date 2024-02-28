@@ -32,7 +32,9 @@ function Home() {
       navigate("/error", { state: { message: data.message } });
       window.history.replaceState(null, "", "/");
     } else {
-      navigate("/employee", { state: { name: data.name } });
+      navigate("/employee", {
+        state: { name: data.name, employeeId: data.employeeId },
+      });
       window.history.replaceState(null, "", "/");
     }
   }
