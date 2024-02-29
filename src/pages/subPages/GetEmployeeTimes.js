@@ -23,7 +23,7 @@ function GetEmployeeTimes() {
 
     const response = await fetch(
       //"https://attendance-manager-backend.vercel.app/api/v1/admin/employee_times",
-      "http://localhost:8080/api/v1/admin/employee_times",
+      "https://attendance-manager-back-i4so-4u3ylam7c-pokoh-ufuomas-projects.vercel.app/api/v1/admin/employee_times",
       options,
     );
     const data = await response.json();

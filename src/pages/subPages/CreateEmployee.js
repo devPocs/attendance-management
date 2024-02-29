@@ -67,7 +67,7 @@ function CreateEmployee() {
   const fetchDepartments = useCallback(async () => {
     try {
       const response = await fetch(
-        "http://localhost:8080/api/v1/departments/all_departments",
+        "https://attendance-manager-back-i4so-4u3ylam7c-pokoh-ufuomas-projects.vercel.app/api/v1/departments/all_departments",
       );
       const data = await response.json();
 
@@ -108,7 +108,7 @@ function CreateEmployee() {
       formData.append("image3", dataURItoBlob(image3), "image3.jpeg");
 
       const response = await fetch(
-        "http://localhost:8080/api/v1/admin/create_new_employee",
+        "https://attendance-manager-back-i4so-4u3ylam7c-pokoh-ufuomas-projects.vercel.app/api/v1/admin/create_new_employee",
         {
           method: "POST",
           body: formData,
