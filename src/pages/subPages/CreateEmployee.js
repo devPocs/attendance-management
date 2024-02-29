@@ -73,7 +73,7 @@ function CreateEmployee() {
 
       setDepartments(data.departments);
     } catch (error) {
-      console.error("Error fetching departments:", error);
+      notify(`Error fetching departments: ${error}`);
     }
   }, []);
 
@@ -128,11 +128,10 @@ function CreateEmployee() {
         setImage2(null);
         setImage3(null);
       } else {
-        notify("Error creating employee:", response.error);
+        notify(`Error creating employee: ${response.error}`);
       }
     } catch (error) {
-      notify("Error during form submission:", error);
-      console.log(error);
+      notify(`Error during form submission: ${error}`);
     }
   };
 

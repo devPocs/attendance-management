@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
 
@@ -16,7 +16,7 @@ const notify = (message) => {
   });
 };
 
-function EditEmployee() {
+const EditEmployee = () => {
   const [employeeDetails, setEmployeeDetails] = useState({
     name: "",
     email: "",
@@ -37,43 +37,49 @@ function EditEmployee() {
     });
   };
 
-  const handleCheckId = async () => {
-    try {
-      const response = await fetch(
-        `https://attendance-manager-backend.vercel.app/api/v1/admin/search_employee?employeeId=${employeeDetails.employeeId}`,
-      );
-      const data = await response.json();
+  const [isSending, setIsSending] = useState(false);
 
-      if (data.success) {
-        // Update all fields with the received data
-        setEmployeeDetails(data.employee);
-        notify("Employee found!");
-      } else {
-        // Handle the case where the employee ID is not found
-        notify("Employee not found!");
-      }
-    } catch (error) {
-      notify("Error checking employee ID:", error);
-    }
-  };
   const handleChange = (field, value) => {
     setEmployeeDetails({
       ...employeeDetails,
       [field]: value,
     });
   };
-  useEffect(() => {
-    console.log("Updated Employee Details:", employeeDetails);
-    console.log(employeeDetails[0]?.name);
-  }, [employeeDetails]);
+  const handleCheckId = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/v1/admin/search_employee?employeeId=${employeeDetails.employeeId}`,
+      );
+      const data = await response.json();
+
+      console.log("Fetched Data:", data);
+
+      if (data.success) {
+        // Access the first item in the employee array
+        const firstEmployee = data.employee[0];
+
+        setEmployeeDetails((prevDetails) => ({
+          ...prevDetails,
+          ...firstEmployee,
+        }));
+
+        notify("Employee found!");
+      } else {
+        notify("Employee not found!");
+      }
+    } catch (error) {
+      notify("Error checking employee ID:" + error);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      // Perform the update using the details in employeeDetails state
-      const response = await fetch(
-        "https://attendance-manager-backend.vercel.app/api/v1/admin/edit_employee",
+      setIsSending(true);
+
+      let response = await fetch(
+        "http://localhost:8080/api/v1/admin/edit_employee",
         {
           method: "PUT",
           headers: {
@@ -83,16 +89,20 @@ function EditEmployee() {
         },
       );
 
-      const data = await response.json();
+      response = await response.json();
 
-      if (data.success) {
-        // Handle success
-        console.log("Employee details updated successfully");
+      if (response.message === "edited!") {
+        setIsSending(false);
+
+        notify("Employee details updated successfully");
       } else {
-        // Handle failure
-        console.error("Failed to update employee details");
+        setIsSending(false);
+
+        notify("Failed to update employee details!");
       }
     } catch (error) {
+      setIsSending(false);
+
       console.error("Error updating employee details:", error);
     }
   };
@@ -105,12 +115,11 @@ function EditEmployee() {
         </span>
       </div>
       <div className="flex h-screen items-center justify-center">
-        {/* Check ID Form */}
         <form
-          action="https://attendance-manager-backend.vercel.app/api/v1/employees/search_employees"
+          action="http://localhost:8080/api/v1/employees/search_employees"
           method="POST"
           id="editEmployeeCheckId"
-          className="mb-4 rounded bg-white px-8 pb-8 pt-6 shadow-md"
+          className="mb-4 flex flex-col rounded bg-white px-8 pb-8 pt-6 shadow-md"
         >
           <div className="mb-4">
             <label
@@ -126,28 +135,29 @@ function EditEmployee() {
               value={employeeDetails.employeeId || ""}
               onChange={(e) =>
                 setEmployeeDetails({
+                  ...employeeDetails,
                   employeeId: e.target.value,
                 })
               }
               className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
             />
           </div>
+
           <button
             id="checkID"
             type="button"
             onClick={handleCheckId}
-            className="focus:shadow-outline rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 focus:outline-none"
+            className="focus:shadow-outline m-auto w-40 rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 focus:outline-none"
           >
             Check ID
           </button>
         </form>
 
-        {/* Edit Employee Form */}
-        <div>
+        <div className="flex flex-col">
           <form
             id="editEmployeeForm"
             onSubmit={handleSubmit}
-            className="mb-4 rounded bg-white px-8 pb-8 pt-6 shadow-md"
+            className="mb-4 ml-10 mt-5 flex h-[42rem] w-96 flex-col rounded bg-white px-8 pb-9 pt-6 shadow-md"
           >
             <div className="mb-4">
               <label
@@ -160,7 +170,7 @@ function EditEmployee() {
                 id="editName"
                 type="text"
                 name="name"
-                value={employeeDetails[0]?.name || ""}
+                value={employeeDetails.name || ""}
                 onChange={(e) => handleChange("name", e.target.value)}
                 className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
               />
@@ -177,13 +187,8 @@ function EditEmployee() {
                 id="editEmail"
                 type="email"
                 name="email"
-                value={employeeDetails[0]?.email || ""}
-                onChange={(e) =>
-                  setEmployeeDetails({
-                    ...employeeDetails,
-                    email: e.target.value,
-                  })
-                }
+                value={employeeDetails.email || ""}
+                onChange={(e) => handleChange("email", e.target.value)}
                 className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
               />
             </div>
@@ -199,14 +204,8 @@ function EditEmployee() {
                 id="editDepartment"
                 type="text"
                 name="department"
-                value={employeeDetails[0]?.department || ""}
-                onChange={(e) =>
-                  setEmployeeDetails({
-                    ...employeeDetails,
-                    department: e.target.value,
-                  })
-                }
-                readOnly="readonly"
+                value={employeeDetails.department || ""}
+                readOnly
                 className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
               />
             </div>
@@ -222,8 +221,8 @@ function EditEmployee() {
                 id="editEmployeeId"
                 type="text"
                 name="editEmployeeId"
-                value={employeeDetails[0]?.employeeId || ""}
-                readOnly="readonly"
+                value={employeeDetails.employeeId || ""}
+                readOnly
                 className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
               />
             </div>
@@ -239,13 +238,8 @@ function EditEmployee() {
                 id="editRole"
                 type="text"
                 name="role"
-                value={employeeDetails[0]?.role || ""}
-                onChange={(e) =>
-                  setEmployeeDetails({
-                    ...employeeDetails,
-                    role: e.target.value,
-                  })
-                }
+                value={employeeDetails.role || ""}
+                onChange={(e) => handleChange("role", e.target.value)}
                 className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
               />
             </div>
@@ -255,73 +249,72 @@ function EditEmployee() {
                 Gender:
               </label>
               <label className="mr-4">
-                <input
-                  type="radio"
+                <RadioButton
                   name="gender"
                   value="male"
-                  checked={employeeDetails[0]?.gender === "male"}
-                  onChange={(e) =>
-                    setEmployeeDetails({
-                      ...employeeDetails,
-                      gender: e.target.value,
-                    })
-                  }
+                  checked={employeeDetails.gender === "male"}
+                  onChange={(e) => handleChange("gender", e.target.value)}
+                  label="Male"
                 />
-                Male
               </label>
               <label className="mr-4">
-                <input
-                  type="radio"
+                <RadioButton
                   name="gender"
                   value="female"
-                  checked={employeeDetails[0]?.gender === "female"}
-                  onChange={(e) =>
-                    setEmployeeDetails({
-                      ...employeeDetails,
-                      gender: e.target.value,
-                    })
-                  }
+                  checked={employeeDetails.gender === "female"}
+                  onChange={(e) => handleChange("gender", e.target.value)}
+                  label="Female"
                 />
-                Female
               </label>
               <label>
-                <input
-                  type="radio"
+                <RadioButton
                   name="gender"
                   value="other"
-                  checked={employeeDetails[0]?.gender === "other"}
-                  onChange={(e) =>
-                    setEmployeeDetails({
-                      ...employeeDetails,
-                      gender: e.target.value,
-                    })
-                  }
+                  checked={employeeDetails.gender === "other"}
+                  onChange={(e) => handleChange("gender", e.target.value)}
+                  label="Other"
                 />
-                Other
               </label>
             </div>
 
-            <div className="flex items-center justify-between">
+            <div className="m-auto mt-5 flex items-center">
               <button
                 type="submit"
-                className="focus:shadow-outline rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 focus:outline-none"
+                className="focus:shadow-outline mr-1 w-40 rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 focus:outline-none"
               >
                 Make Changes
               </button>
+              <button
+                onClick={clearFields}
+                className="focus:shadow-outline ml-1 w-40 rounded bg-red-500 px-4 py-2 font-bold text-white hover:bg-red-700 focus:outline-none"
+              >
+                Clear Fields
+              </button>
             </div>
+            {isSending && (
+              <div className="m-auto mt-5 flex h-10 w-40 items-center justify-center p-2">
+                <div className="h-4 w-4 animate-spin rounded-full border-b-2 border-r-2 border-t-2 border-blue-500 "></div>
+                <p className="ml-2 text-blue-500">Processing...</p>
+              </div>
+            )}
           </form>
-
-          {/* Clear Fields Button */}
-          <button
-            onClick={clearFields}
-            className="focus:shadow-outline mb-4 rounded bg-red-500 px-4 py-2 font-bold text-white hover:bg-red-700 focus:outline-none"
-          >
-            Clear Fields
-          </button>
         </div>
       </div>
     </>
   );
-}
+};
+
+const RadioButton = ({ name, value, checked, onChange, label }) => (
+  <label className="mr-4">
+    <input
+      type="radio"
+      name={name}
+      value={value}
+      checked={checked}
+      onChange={onChange}
+    />
+    {label}
+  </label>
+);
 
 export default EditEmployee;

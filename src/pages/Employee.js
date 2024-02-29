@@ -38,7 +38,7 @@ function Employee() {
   const webcamRef = useRef(null);
   const [image, setImage] = useState(null);
 
-  const [imageCompared, setImageCompared] = useState(false);
+  const [isSending, setIsSending] = useState(false);
 
   const capture = useCallback(
     (imageKey) => {
@@ -51,8 +51,31 @@ function Employee() {
     [webcamRef, image],
   );
 
+  const handleSignIn = async () => {
+    const data = { employeeId: employeeId };
+    try {
+      let response = await fetch(
+        "http://localhost:8080/api/v1/employees/signIn",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        },
+      );
+
+      response = await response.json();
+
+      if (response.status === "fail") {
+        notify(response.message);
+      }
+    } catch (error) {}
+  };
+
   const handleCapture = async () => {
     try {
+      setIsSending(true);
       const formData = new FormData();
       if (!image) {
         notify("Please capture image.");
@@ -70,66 +93,67 @@ function Employee() {
         },
       );
       response = await response.json();
+
       if (response.statusCode === 400) {
-        console.log(response.statusCode);
         notify("Error! Picture not clear enough or no match! ");
+        setIsSending(false);
       }
       if (response.statusCode === 200) {
-        console.log(response);
-        setImageCompared(true);
-        notify("matched!");
+        let label = response.label;
+
+        notify(`matched: ${label}`);
+        await handleSignIn();
+        setIsSending(false);
       }
     } catch (error) {
-      notify("Technical fault:", error);
+      setIsSending(false);
+      notify(`Technical fault: ${error}`);
     }
   };
 
-  function handleSignIn() {}
-
   return (
-    <div>
-      <h1 className="text-2xl text-blue-700">
-        Welcome, {name}. EmployeeID: {employeeId}
-      </h1>
-      <Webcam
-        audio={false}
-        ref={webcamRef}
-        screenshotFormat="image/jpeg"
-        className="mt-4"
-      />
-      <button
-        onClick={() => capture("image")}
-        className="mt-2 bg-blue-500 p-2 text-white"
-      >
-        Capture Image
-      </button>
-      {image && (
-        <div className="mt-4">
-          <h2 className="text-lg font-semibold">Captured Image:</h2>
-          <img src={image} alt="Captured" className="mt-2" />
-        </div>
-      )}
-      {image && (
+    <div className="relative flex">
+      <div className="mb-10 ml-4 text-center">
+        <h1 className="mt-3 text-2xl text-blue-700">
+          Welcome, {name}. EmployeeID: {employeeId}
+        </h1>
+        <Webcam
+          audio={false}
+          ref={webcamRef}
+          screenshotFormat="image/jpeg"
+          className="mt-4"
+        />
         <button
-          onClick={() => {
-            handleCapture();
-          }}
+          onClick={() => capture("image")}
           className="mt-2 bg-blue-500 p-2 text-white"
         >
-          Compare
+          Capture Image
         </button>
-      )}
-
-      {imageCompared && (
-        <button
-          onClick={() => {
-            handleSignIn();
-          }}
-          className="mt-2 bg-blue-500 p-2 text-white"
-        >
-          Sign In
-        </button>
-      )}
+        {image && (
+          <div className="mt-4">
+            <h2 className="text-lg font-semibold">Captured Image:</h2>
+            <img src={image} alt="Captured" className="mt-2" />
+          </div>
+        )}
+        {image && (
+          <button
+            onClick={() => {
+              handleCapture();
+            }}
+            className="mt-2 bg-blue-500 p-2 text-white"
+          >
+            Compare
+          </button>
+        )}
+      </div>
+      <div className="fixed left-2/3 top-56 flex items-center">
+        {isSending && (
+          <div className=" ml-4 flex items-center">
+            <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-r-2 border-t-2 border-blue-500 "></div>
+            <p className="ml-2 text-2xl text-blue-500">Processing...</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

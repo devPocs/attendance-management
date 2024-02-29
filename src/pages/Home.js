@@ -26,7 +26,6 @@ function Home() {
       options,
     );
     const data = await response.json();
-    console.log(data);
 
     if (data.success === "false") {
       navigate("/error", { state: { message: data.message } });
