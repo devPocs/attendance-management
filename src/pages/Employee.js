@@ -55,7 +55,7 @@ function Employee() {
     const data = { employeeId: employeeId };
     try {
       let response = await fetch(
-        "https://attendance-manager-back-i4so-4u3ylam7c-pokoh-ufuomas-projects.vercel.app/api/v1/employees/signIn",
+        "https://attendance-manager-backend.vercel.app/api/v1/employees/signIn",
         {
           method: "POST",
           headers: {
@@ -86,7 +86,7 @@ function Employee() {
       formData.append("image", dataURItoBlob(image), "image.jpeg");
 
       let response = await fetch(
-        "https://attendance-manager-back-i4so-4u3ylam7c-pokoh-ufuomas-projects.vercel.app/api/v1/employees/compare_image",
+        "https://attendance-manager-backend.vercel.app/api/v1/employees/compare_image",
         {
           method: "POST",
           body: formData,

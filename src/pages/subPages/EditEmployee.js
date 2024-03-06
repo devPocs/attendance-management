@@ -48,7 +48,7 @@ const EditEmployee = () => {
   const handleCheckId = async () => {
     try {
       const response = await fetch(
-        `https://attendance-manager-back-i4so-4u3ylam7c-pokoh-ufuomas-projects.vercel.app/api/v1/admin/search_employee?employeeId=${employeeDetails.employeeId}`,
+        `https://attendance-manager-backend.vercel.app/api/v1/admin/search_employee?employeeId=${employeeDetails.employeeId}`,
       );
       const data = await response.json();
 
@@ -79,7 +79,7 @@ const EditEmployee = () => {
       setIsSending(true);
 
       let response = await fetch(
-        "https://attendance-manager-back-i4so-4u3ylam7c-pokoh-ufuomas-projects.vercel.app/api/v1/admin/edit_employee",
+        "https://attendance-manager-backend.vercel.app/api/v1/admin/edit_employee",
         {
           method: "PUT",
           headers: {
@@ -116,7 +116,7 @@ const EditEmployee = () => {
       </div>
       <div className="flex h-screen items-center justify-center">
         <form
-          action="https://attendance-manager-back-i4so-4u3ylam7c-pokoh-ufuomas-projects.vercel.app/api/v1/employees/search_employees"
+          action="https://attendance-manager-backend.vercel.app/api/v1/employees/search_employees"
           method="POST"
           id="editEmployeeCheckId"
           className="mb-4 flex flex-col rounded bg-white px-8 pb-8 pt-6 shadow-md"
