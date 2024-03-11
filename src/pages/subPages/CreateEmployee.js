@@ -68,6 +68,7 @@ function CreateEmployee() {
     try {
       const response = await fetch(
         "https://attendance-manager-backend.vercel.app/api/v1/departments/all_departments",
+        //"http://localhost:8080/api/v1/departments/all_departments",
       );
       const data = await response.json();
 
@@ -109,6 +110,7 @@ function CreateEmployee() {
 
       const response = await fetch(
         "https://attendance-manager-backend.vercel.app/api/v1/admin/create_new_employee",
+        //"http://localhost:8080/api/v1/admin/create_new_employee",
         {
           method: "POST",
           body: formData,
@@ -128,9 +130,11 @@ function CreateEmployee() {
         setImage2(null);
         setImage3(null);
       } else {
+        setStatus("sent");
         notify(`Error creating employee: ${response.error}`);
       }
     } catch (error) {
+      setStatus("sent");
       notify(`Error during form submission: ${error}`);
     }
   };
